@@ -1,321 +1,192 @@
-import { useNavigate } from "react-router-dom";
-import {
-    TrendingUp,
-    Users,
-    Clock,
-    CheckCircle2,
-    ArrowUpRight,
-    ArrowDownRight,
-    ChevronRight,
-} from "lucide-react";
-import {
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    ResponsiveContainer,
-    Area,
-    AreaChart,
-} from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { useTheme } from "@/context/ThemeContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { formatCurrency, formatRelativeTime } from "@/lib/utils";
-
-const kpiData = [
-    {
-        title: "Toplam Ciro",
-        value: 2450000,
-        change: 12.5,
-        trend: "up",
-        icon: TrendingUp,
-        format: "currency",
-        gradient: "from-blue-500 via-cyan-500 to-blue-600",
-    },
-    {
-        title: "Aktif Müşteriler",
-        value: 248,
-        change: 8.2,
-        trend: "up",
-        icon: Users,
-        format: "number",
-        gradient: "from-cyan-500 via-blue-500 to-indigo-500",
-    },
-    {
-        title: "Bekleyen İşler",
-        value: 23,
-        change: -5.4,
-        trend: "down",
-        icon: Clock,
-        format: "number",
-        gradient: "from-amber-500 to-orange-500",
-    },
-    {
-        title: "Tamamlanan Projeler",
-        value: 156,
-        change: 15.8,
-        trend: "up",
-        icon: CheckCircle2,
-        format: "number",
-        gradient: "from-emerald-500 to-teal-500",
-    },
-];
-
-const chartDataBase = [
-    { monthKey: "jan", sales: 185000 },
-    { monthKey: "feb", sales: 220000 },
-    { monthKey: "mar", sales: 195000 },
-    { monthKey: "apr", sales: 280000 },
-    { monthKey: "may", sales: 310000 },
-    { monthKey: "jun", sales: 295000 },
-    { monthKey: "jul", sales: 340000 },
-    { monthKey: "aug", sales: 285000 },
-    { monthKey: "sep", sales: 320000 },
-    { monthKey: "oct", sales: 380000 },
-    { monthKey: "nov", sales: 420000 },
-    { monthKey: "dec", sales: 450000 },
-];
-
-const recentActivitiesBase = [
-    {
-        id: 1,
-        type: "customer",
-        messageKey: "activityNewCustomer",
-        company: "ABC Teknoloji",
-        time: new Date(Date.now() - 1000 * 60 * 15),
-        link: "/sirket/abc-teknoloji",
-    },
-    {
-        id: 2,
-        type: "deal",
-        messageKey: "activityProposalSent",
-        company: "XYZ Danışmanlık",
-        amount: "₺125.000",
-        time: new Date(Date.now() - 1000 * 60 * 45),
-        link: "/sirket/xyz-danismanlik",
-    },
-    {
-        id: 3,
-        type: "success",
-        messageKey: "activityDealWon",
-        company: "Metro Grup",
-        amount: "₺280.000",
-        time: new Date(Date.now() - 1000 * 60 * 120),
-        link: "/sirket/metro-grup",
-    },
-    {
-        id: 4,
-        type: "meeting",
-        messageKey: "activityMeetingScheduled",
-        company: "DEF Holding",
-        time: new Date(Date.now() - 1000 * 60 * 180),
-        link: "/sirket/def-holding",
-    },
-    {
-        id: 5,
-        type: "customer",
-        messageKey: "activityCustomerUpdated",
-        company: "GHI Yazılım",
-        time: new Date(Date.now() - 1000 * 60 * 60 * 5),
-        link: "/sirket/ghi-yazilim",
-    },
-];
-
-function KPICard({ title, value, change, trend, icon: Icon, format, gradient }) {
-    const displayValue =
-        format === "currency" ? formatCurrency(value) : value.toLocaleString("tr-TR");
-    const isPositive = trend === "up";
-
-    return (
-        <Card className="animate-fade-in overflow-hidden relative group">
-            <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-300`} />
-            <CardContent className="p-6 relative">
-                <div className="flex items-center justify-between">
-                    <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${gradient} shadow-lg animate-gradient`}>
-                        <Icon className="h-6 w-6 text-white" />
-                    </div>
-                    <div
-                        className={`flex items-center gap-1 text-sm font-medium ${isPositive ? "text-emerald-500" : "text-red-500"
-                            }`}
-                    >
-                        {isPositive ? (
-                            <ArrowUpRight className="h-4 w-4" />
-                        ) : (
-                            <ArrowDownRight className="h-4 w-4" />
-                        )}
-                        {Math.abs(change)}%
-                    </div>
-                </div>
-                <div className="mt-4">
-                    <p className="text-2xl font-bold tracking-tight">{displayValue}</p>
-                    <p className="text-sm text-muted-foreground mt-1">{title}</p>
-                </div>
-            </CardContent>
-        </Card>
-    );
-}
-
-function CustomTooltip({ active, payload, label }) {
-    if (active && payload && payload.length) {
-        return (
-            <div className="rounded-lg border bg-card p-3 shadow-lg backdrop-blur-sm">
-                <p className="font-medium text-foreground">{label}</p>
-                <p className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent font-semibold">
-                    {formatCurrency(payload[0].value)}
-                </p>
-            </div>
-        );
-    }
-    return null;
-}
+import { useData } from "@/context/DataContext";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/utils";
+import {
+    Users,
+    CreditCard,
+    Activity,
+    ArrowUpRight,
+    TrendingUp,
+    Briefcase,
+    CheckCircle2,
+    CalendarDays,
+    MoreHorizontal
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
 
 export function Dashboard() {
-    const { theme } = useTheme();
-    const navigate = useNavigate();
-    const { t, language } = useLanguage();
+    const { t } = useLanguage();
+    const { customers, tasks, activities } = useData();
 
-    // Create translated chart data
-    const chartData = chartDataBase.map(item => ({
-        month: t(item.monthKey),
-        sales: item.sales
-    }));
+    // CALCULATE KPIS
+    const totalRevenue = 45231.89; // Mock for now, or sum from deals
+    const activeCustomers = customers.filter(c => c.status === 'active').length;
+    const pendingTasks = tasks.filter(t => t.status === 'todo').length;
+    const completedTasks = tasks.filter(t => t.status === 'done').length;
 
-    // Create translated activity messages
-    const getActivityMessage = (activity) => {
-        let msg = t(activity.messageKey);
-        msg = msg.replace("{company}", activity.company);
-        if (activity.amount) {
-            msg = msg.replace("{amount}", activity.amount);
-        }
-        return msg;
-    };
+    // Recent Tasks Widget Data
+    const recentTasks = tasks
+        .filter(t => t.status !== 'done')
+        .slice(0, 5);
 
-    const recentActivities = recentActivitiesBase.map(activity => ({
-        ...activity,
-        message: getActivityMessage(activity)
-    }));
+    // Recent Activities
+    const recentActivities = activities.slice(0, 4);
 
-    // Theme-aware colors for Recharts
-    const chartColors = {
-        text: theme === "dark" ? "#a1a1aa" : "#71717a",
-        grid: theme === "dark" ? "#3f3f46" : "#e4e4e7",
-    };
+    // Chart Data
+    const taskStatusData = [
+        { name: t('todo'), value: pendingTasks, color: '#3b82f6' },
+        { name: t('in_progress'), value: tasks.filter(t => t.status === 'in_progress').length, color: '#f59e0b' },
+        { name: t('done'), value: completedTasks, color: '#10b981' },
+    ];
 
     return (
         <div className="space-y-6">
-            {/* Page Title */}
-            <div>
-                <h1 className="text-xl sm:text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent animate-gradient-text">
-                    {t("dashboardTitle")}
-                </h1>
-                <p className="text-muted-foreground">
-                    {t("dashboardSubtitle")}
-                </p>
-            </div>
-
-            {/* KPI Cards */}
-            <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
-                <KPICard title={t("totalRevenue")} value={2450000} change={12.5} trend="up" icon={TrendingUp} format="currency" gradient="from-blue-500 via-cyan-500 to-blue-600" />
-                <KPICard title={t("activeCustomers")} value={248} change={8.2} trend="up" icon={Users} format="number" gradient="from-cyan-500 via-blue-500 to-indigo-500" />
-                <KPICard title={t("pendingTasks")} value={23} change={-5.4} trend="down" icon={Clock} format="number" gradient="from-amber-500 to-orange-500" />
-                <KPICard title={t("completedProjects")} value={156} change={15.8} trend="up" icon={CheckCircle2} format="number" gradient="from-emerald-500 to-teal-500" />
-            </div>
-
-            {/* Chart and Activities */}
-            <div className="grid gap-6 lg:grid-cols-3">
-                {/* Sales Chart */}
-                <Card className="lg:col-span-2 animate-fade-in overflow-hidden">
-                    <CardHeader>
-                        <CardTitle>{t("monthlySalesPerformance")}</CardTitle>
+            {/* KPI GRID */}
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <Card className="hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">{t('totalRevenue')}</CardTitle>
+                        <CreditCard className="h-4 w-4 text-emerald-600" />
                     </CardHeader>
-                    <CardContent className="p-2 sm:p-6">
-                        <div className="h-48 sm:h-80">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={chartData}>
-                                    <defs>
-                                        <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
-                                            <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
-                                        </linearGradient>
-                                        <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
-                                            <stop offset="0%" stopColor="#3b82f6" />
-                                            <stop offset="50%" stopColor="#06b6d4" />
-                                            <stop offset="100%" stopColor="#3b82f6" />
-                                        </linearGradient>
-                                    </defs>
-                                    <CartesianGrid
-                                        strokeDasharray="3 3"
-                                        stroke={chartColors.grid}
-                                        vertical={false}
-                                    />
-                                    <XAxis
-                                        dataKey="month"
-                                        tick={{ fill: chartColors.text, fontSize: 12 }}
-                                        axisLine={{ stroke: chartColors.grid }}
-                                        tickLine={{ stroke: chartColors.grid }}
-                                    />
-                                    <YAxis
-                                        tick={{ fill: chartColors.text, fontSize: 12 }}
-                                        axisLine={{ stroke: chartColors.grid }}
-                                        tickLine={{ stroke: chartColors.grid }}
-                                        tickFormatter={(value) => `${value / 1000}K`}
-                                    />
-                                    <Tooltip content={<CustomTooltip />} />
-                                    <Area
-                                        type="monotone"
-                                        dataKey="sales"
-                                        stroke="url(#lineGradient)"
-                                        strokeWidth={2.5}
-                                        fill="url(#colorSales)"
-                                    />
-                                </AreaChart>
-                            </ResponsiveContainer>
+                    <CardContent>
+                        <div className="text-2xl font-bold">{formatCurrency(totalRevenue)}</div>
+                        <p className="text-xs text-muted-foreground flex items-center text-emerald-600 mt-1">
+                            <TrendingUp className="h-3 w-3 mr-1" />
+                            +20.1% {t('fromLastMonth')}
+                        </p>
+                    </CardContent>
+                </Card>
+
+                <Card className="hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">{t('activeCustomers')}</CardTitle>
+                        <Users className="h-4 w-4 text-blue-600" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">+{activeCustomers}</div>
+                        <p className="text-xs text-muted-foreground mt-1">
+                            {t('totalCustomers')}: {customers.length}
+                        </p>
+                    </CardContent>
+                </Card>
+
+                <Card className="hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">{t('pendingTasks')}</CardTitle>
+                        <CheckCircle2 className="h-4 w-4 text-amber-600" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">{pendingTasks}</div>
+                        <p className="text-xs text-muted-foreground flex items-center text-amber-600 mt-1">
+                            {tasks.filter(t => t.priority === 'high' && t.status !== 'done').length} {t('highPriority')}
+                        </p>
+                    </CardContent>
+                </Card>
+
+                <Card className="hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">{t('activeProjects')}</CardTitle>
+                        <Activity className="h-4 w-4 text-purple-600" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">12</div>
+                        <p className="text-xs text-muted-foreground mt-1">
+                            {t('newThisWeek')}: +2
+                        </p>
+                    </CardContent>
+                </Card>
+            </div>
+
+            {/* MID SECTION: CHARTS AND TASKS */}
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+
+                {/* RECENT TASKS WIDGET (4 cols) */}
+                <Card className="col-span-4">
+                    <CardHeader>
+                        <CardTitle>{t('todaysTasks')}</CardTitle>
+                        <CardDescription>{pendingTasks} {t('tasks').toLowerCase()} {t('pendingTasks').toLowerCase()}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-4">
+                            {recentTasks.map((task, i) => (
+                                <div key={task.id} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-2 h-2 rounded-full ${task.priority === 'high' ? 'bg-red-500' : 'bg-blue-500'}`} />
+                                        <div>
+                                            <p className="text-sm font-medium leading-none">{task.title}</p>
+                                            <p className="text-xs text-muted-foreground mt-1">{task.dueDate}</p>
+                                        </div>
+                                    </div>
+                                    <Badge variant="outline">{t(task.status)}</Badge>
+                                </div>
+                            ))}
                         </div>
                     </CardContent>
                 </Card>
 
-                {/* Recent Activities */}
-                <Card className="animate-fade-in">
+                {/* TASK STATUS PIE CHART (3 cols) */}
+                <Card className="col-span-3">
                     <CardHeader>
-                        <CardTitle>{t("recentActivities")}</CardTitle>
+                        <CardTitle>{t('taskStatus')}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-2">
-                            {recentActivities.map((activity) => (
-                                <div
-                                    key={activity.id}
-                                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors duration-200 cursor-pointer group"
-                                    onClick={() => navigate(activity.link)}
-                                >
-                                    <div className="shrink-0">
-                                        {activity.type === "success" ? (
-                                            <Badge variant="success" className="px-2 py-1 bg-gradient-to-r from-emerald-500 to-teal-500 text-white border-0 animate-gradient">
-                                                {t("won")}
-                                            </Badge>
-                                        ) : activity.type === "deal" ? (
-                                            <Badge variant="secondary" className="px-2 py-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-0 animate-gradient">
-                                                {t("proposal")}
-                                            </Badge>
-                                        ) : activity.type === "customer" ? (
-                                            <Badge variant="outline" className="px-2 py-1">
-                                                {t("customer")}
-                                            </Badge>
-                                        ) : (
-                                            <Badge variant="secondary" className="px-2 py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white border-0 animate-gradient">
-                                                {t("meeting")}
-                                            </Badge>
-                                        )}
+                        <div className="h-[250px] w-full">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={taskStatusData}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={60}
+                                        outerRadius={80}
+                                        paddingAngle={5}
+                                        dataKey="value"
+                                    >
+                                        {taskStatusData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.color} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+                        <div className="flex justify-center gap-4 text-xs text-muted-foreground mt-2">
+                            {taskStatusData.map((d, i) => (
+                                <div key={i} className="flex items-center gap-1">
+                                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: d.color }} />
+                                    {d.name} ({d.value})
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+
+            {/* BOTTOM SECTION: ACTIVITIES */}
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 ">
+                <Card className="col-span-4">
+                    <CardHeader>
+                        <CardTitle>{t('recentActivities')}</CardTitle>
+                        <CardDescription>Müşterilerle yapılan son etkileşimler.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-6">
+                            {recentActivities.map((activity, i) => (
+                                <div key={activity.id} className="flex items-start gap-4 text-sm">
+                                    <div className="mt-0.5 bg-muted p-2 rounded-full">
+                                        {activity.type === 'meeting' ? <Briefcase className="w-4 h-4" /> : <Users className="w-4 h-4" />}
                                     </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-medium leading-relaxed truncate">
-                                            {activity.message}
-                                        </p>
-                                        <p className="text-xs text-muted-foreground mt-0.5">
-                                            {formatRelativeTime(activity.time, language)}
-                                        </p>
+                                    <div className="grid gap-1">
+                                        <p className="font-medium">{activity.note}</p>
+                                        <div className="text-xs text-muted-foreground flex gap-2">
+                                            <span>{new Date(activity.date).toLocaleDateString("tr-TR")}</span>
+                                            <span>•</span>
+                                            <span>{t('customer')} ID: {activity.customerId}</span>
+                                        </div>
                                     </div>
-                                    <ChevronRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </div>
                             ))}
                         </div>

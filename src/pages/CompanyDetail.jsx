@@ -1,4 +1,7 @@
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useData } from "@/context/DataContext";
+import { useLanguage } from "@/context/LanguageContext";
 import {
     ArrowLeft,
     Building2,
@@ -10,363 +13,256 @@ import {
     Users,
     FileText,
     Clock,
-    ExternalLink,
+    MoreHorizontal,
+    Plus,
+    Paperclip,
+    Download,
+    Trash
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { useLanguage } from "@/context/LanguageContext";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
-// Şirket verileri
-const companiesData = {
-    "abc-teknoloji": {
-        id: "abc-teknoloji",
-        name: "ABC Teknoloji A.Ş.",
-        contact: "Mehmet Yılmaz",
-        email: "mehmet@abctech.com",
-        phone: "+90 532 111 22 33",
-        address: "İstanbul, Maslak",
-        status: "active",
-        totalRevenue: 285000,
-        deals: [
-            { id: 1, title: "Web Sitesi Yenileme", value: 85000, stage: "new", date: "2024-12-10" },
-            { id: 2, title: "SEO Optimizasyonu", value: 45000, stage: "won", date: "2024-10-15" },
-            { id: 3, title: "Mobil Uygulama v2", value: 155000, stage: "proposal", date: "2024-12-01" },
-        ],
-        activities: [
-            { type: "meeting", textKey: "activityMeetingHeld", date: "2024-12-15" },
-            { type: "email", textKey: "activityProposalEmailSent", date: "2024-12-10" },
-            { type: "call", textKey: "activityPhoneCall", date: "2024-12-05" },
-        ],
-    },
-    "xyz-danismanlik": {
-        id: "xyz-danismanlik",
-        name: "XYZ Danışmanlık",
-        contact: "Ayşe Kara",
-        email: "ayse@xyz.com",
-        phone: "+90 533 222 33 44",
-        address: "Ankara, Çankaya",
-        status: "active",
-        totalRevenue: 125000,
-        deals: [
-            { id: 1, title: "CRM Entegrasyonu", value: 125000, stage: "negotiating", date: "2024-12-08" },
-        ],
-        activities: [
-            { type: "meeting", textKey: "activityDemoPresented", date: "2024-12-12" },
-            { type: "call", textKey: "activityPriceNegotiation", date: "2024-12-08" },
-        ],
-    },
-    "metro-grup": {
-        id: "metro-grup",
-        name: "Metro Grup",
-        contact: "Ali Demir",
-        email: "ali@metrogrup.com",
-        phone: "+90 534 333 44 55",
-        address: "İzmir, Alsancak",
-        status: "active",
-        totalRevenue: 580000,
-        deals: [
-            { id: 1, title: "E-ticaret Platformu", value: 280000, stage: "proposal", date: "2024-12-05" },
-            { id: 2, title: "ERP Entegrasyonu", value: 300000, stage: "won", date: "2024-09-20" },
-        ],
-        activities: [
-            { type: "email", textKey: "activityContractSent", date: "2024-12-14" },
-            { type: "meeting", textKey: "activityTechnicalMeeting", date: "2024-12-10" },
-        ],
-    },
-    "def-holding": {
-        id: "def-holding",
-        name: "DEF Holding",
-        contact: "Zeynep Öztürk",
-        email: "zeynep@defholding.com",
-        phone: "+90 535 444 55 66",
-        address: "İstanbul, Levent",
-        status: "active",
-        totalRevenue: 195000,
-        deals: [
-            { id: 1, title: "Mobil Uygulama", value: 195000, stage: "negotiating", date: "2024-12-02" },
-        ],
-        activities: [
-            { type: "call", textKey: "activityProjectDetails", date: "2024-12-13" },
-        ],
-    },
-    "ghi-yazilim": {
-        id: "ghi-yazilim",
-        name: "GHI Yazılım",
-        contact: "Can Aydın",
-        email: "can@ghiyazilim.com",
-        phone: "+90 536 555 66 77",
-        address: "Bursa, Nilüfer",
-        status: "active",
-        totalRevenue: 150000,
-        deals: [
-            { id: 1, title: "Kurumsal Portal", value: 150000, stage: "won", date: "2024-11-15" },
-        ],
-        activities: [
-            { type: "email", textKey: "activityProjectDelivered", date: "2024-12-10" },
-        ],
-    },
-    "jkl-medya": {
-        id: "jkl-medya",
-        name: "JKL Medya",
-        contact: "Selin Arslan",
-        email: "selin@jklmedya.com",
-        phone: "+90 537 666 77 88",
-        address: "İstanbul, Beşiktaş",
-        status: "active",
-        totalRevenue: 65000,
-        deals: [
-            { id: 1, title: "API Geliştirme", value: 65000, stage: "new", date: "2024-12-16" },
-        ],
-        activities: [
-            { type: "meeting", textKey: "activityFirstMeeting", date: "2024-12-16" },
-        ],
-    },
-    "mno-lojistik": {
-        id: "mno-lojistik",
-        name: "MNO Lojistik",
-        contact: "Emre Çelik",
-        email: "emre@mnolojistik.com",
-        phone: "+90 538 777 88 99",
-        address: "Kocaeli, Gebze",
-        status: "inactive",
-        totalRevenue: 0,
-        deals: [
-            { id: 1, title: "Veri Analizi Platformu", value: 320000, stage: "lost", date: "2024-11-01" },
-        ],
-        activities: [
-            { type: "email", textKey: "activityProjectCancelled", date: "2024-11-15" },
-        ],
-    },
-    "pqr-finansal": {
-        id: "pqr-finansal",
-        name: "PQR Finansal",
-        contact: "Gizem Şahin",
-        email: "gizem@pqrfinansal.com",
-        phone: "+90 539 888 99 00",
-        address: "İstanbul, Şişli",
-        status: "lead",
-        totalRevenue: 175000,
-        deals: [
-            { id: 1, title: "Otomasyon Sistemi", value: 175000, stage: "proposal", date: "2024-12-12" },
-        ],
-        activities: [
-            { type: "call", textKey: "activityProposalDetailsExplained", date: "2024-12-14" },
-        ],
-    },
-    "stu-holding": {
-        id: "stu-holding",
-        name: "STU Holding",
-        contact: "Burak Yıldız",
-        email: "burak@stuholding.com",
-        phone: "+90 530 999 00 11",
-        address: "Ankara, Söğütözü",
-        status: "active",
-        totalRevenue: 420000,
-        deals: [
-            { id: 1, title: "Bulut Altyapısı", value: 420000, stage: "won", date: "2024-10-20" },
-        ],
-        activities: [
-            { type: "meeting", textKey: "activityProjectKickoff", date: "2024-10-25" },
-        ],
-    },
-};
-
-const stageLabels = {
-    new: { labelKey: "newDeal", color: "bg-slate-500" },
-    negotiating: { labelKey: "negotiating", color: "bg-blue-500" },
-    proposal: { labelKey: "proposal", color: "bg-amber-500" },
-    won: { labelKey: "won", color: "bg-emerald-500" },
-    lost: { labelKey: "lost", color: "bg-red-500" },
-};
-
-const statusLabels = {
-    active: { labelKey: "active", variant: "success" },
-    inactive: { labelKey: "inactive", variant: "secondary" },
-    lead: { labelKey: "potential", variant: "warning" },
-};
+// Mock Files Data
+const MOCK_FILES = [
+    { id: 1, name: "Sözleşme Taslağı v2.pdf", size: "2.4 MB", date: "2024-12-10", type: "pdf" },
+    { id: 2, name: "Proje Gereksinimleri.docx", size: "1.1 MB", date: "2024-12-05", type: "doc" },
+    { id: 3, name: "Logo Paketi.zip", size: "15 MB", date: "2024-11-20", type: "zip" },
+];
 
 export function CompanyDetail() {
     const { companyId } = useParams();
     const navigate = useNavigate();
-    const { t, language } = useLanguage();
+    const { customers, tasks, activities } = useData();
+    const { t } = useLanguage();
+    const [activeTab, setActiveTab] = useState("overview");
 
-    const company = companiesData[companyId];
+    // Find data
+    const company = customers.find(c => c.id === companyId || c.slug === companyId);
+    const companyTasks = tasks.filter(t => t.customerId === company?.id);
+    const companyActivities = activities.filter(a => a.customerId === company?.id);
 
     if (!company) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
                 <Building2 className="h-16 w-16 text-muted-foreground" />
                 <h2 className="text-xl font-semibold">{t("companyNotFound")}</h2>
-                <p className="text-muted-foreground">{t("companyNotFoundDesc")}</p>
                 <Button onClick={() => navigate(-1)}>
-                    <ArrowLeft className="h-4 w-4" />
+                    <ArrowLeft className="h-4 w-4 mr-2" />
                     {t("goBack")}
                 </Button>
             </div>
         );
     }
 
-    const activeDeals = company.deals.filter((d) => !["won", "lost"].includes(d.stage));
-    const wonDeals = company.deals.filter((d) => d.stage === "won");
+    const statusColors = {
+        active: "success",
+        inactive: "secondary",
+        lead: "warning",
+    };
 
     return (
         <div className="space-y-6">
-            {/* Back Button & Title */}
-            <div className="flex items-center gap-4">
-                <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
-                    <ArrowLeft className="h-5 w-5" />
-                </Button>
-                <div className="flex-1 min-w-0">
-                    <h1 className="text-xl sm:text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent animate-gradient-text truncate">
-                        {company.name}
-                    </h1>
-                    <div className="flex items-center gap-2 mt-1">
-                        <Badge variant={statusLabels[company.status].variant}>
-                            {t(statusLabels[company.status].labelKey)}
-                        </Badge>
-                        <span className="text-sm text-muted-foreground">
-                            {t("contactPerson")}: {company.contact}
-                        </span>
+            {/* Header */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                    <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+                        <ArrowLeft className="h-5 w-5" />
+                    </Button>
+                    <div>
+                        <div className="flex items-center gap-3">
+                            <h1 className="text-2xl font-bold tracking-tight">{company.name}</h1>
+                            <Badge variant={statusColors[company.status]}>{t(company.status)}</Badge>
+                        </div>
+                        <p className="text-muted-foreground flex items-center gap-2 text-sm mt-1">
+                            <Building2 className="h-4 w-4" />
+                            {company.company}
+                        </p>
                     </div>
+                </div>
+                <div className="flex gap-2">
+                    <Button variant="outline">
+                        <Mail className="h-4 w-4 mr-2" />
+                        {t("email")}
+                    </Button>
+                    <Button variant="outline">
+                        <Phone className="h-4 w-4 mr-2" />
+                        {t("call")}
+                    </Button>
+                    <Button>
+                        <Plus className="h-4 w-4 mr-2" />
+                        {t("add")}
+                    </Button>
                 </div>
             </div>
 
-            {/* Stats Cards */}
-            <div className="grid gap-3 sm:gap-4 grid-cols-2 md:grid-cols-4">
-                <Card className="animate-fade-in">
-                    <CardContent className="p-4">
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 text-white">
-                                <TrendingUp className="h-5 w-5" />
-                            </div>
-                            <div>
-                                <p className="text-xs text-muted-foreground">{t("totalIncome")}</p>
-                                <p className="text-lg font-bold">{formatCurrency(company.totalRevenue, language)}</p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-                <Card className="animate-fade-in">
-                    <CardContent className="p-4">
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 text-white">
-                                <FileText className="h-5 w-5" />
-                            </div>
-                            <div>
-                                <p className="text-xs text-muted-foreground">{t("activeOpportunities")}</p>
-                                <p className="text-lg font-bold">{activeDeals.length}</p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-                <Card className="animate-fade-in">
-                    <CardContent className="p-4">
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 text-white">
-                                <Users className="h-5 w-5" />
-                            </div>
-                            <div>
-                                <p className="text-xs text-muted-foreground">{t("wonCount")}</p>
-                                <p className="text-lg font-bold">{wonDeals.length}</p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-                <Card className="animate-fade-in">
-                    <CardContent className="p-4">
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-indigo-500 text-white">
-                                <Clock className="h-5 w-5" />
-                            </div>
-                            <div>
-                                <p className="text-xs text-muted-foreground">{t("activity")}</p>
-                                <p className="text-lg font-bold">{company.activities.length}</p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
+            {/* Tabs */}
+            <Tabs defaultValue="overview" className="space-y-4" onValueChange={setActiveTab}>
+                <TabsList>
+                    <TabsTrigger value="overview">{t("overview")}</TabsTrigger>
+                    <TabsTrigger value="timeline">{t("timeline")}</TabsTrigger>
+                    <TabsTrigger value="tasks">{t("tasks")} ({companyTasks.length})</TabsTrigger>
+                    <TabsTrigger value="files">{t("files")} ({MOCK_FILES.length})</TabsTrigger>
+                </TabsList>
 
-            <div className="grid gap-6 lg:grid-cols-3">
-                {/* Contact Info */}
-                <Card className="animate-fade-in">
-                    <CardHeader>
-                        <CardTitle className="text-lg">{t("contactInfo")}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="flex items-center gap-3">
-                            <Mail className="h-4 w-4 text-muted-foreground" />
-                            <a href={`mailto:${company.email}`} className="text-sm hover:text-primary transition-colors">
-                                {company.email}
-                            </a>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <Phone className="h-4 w-4 text-muted-foreground" />
-                            <a href={`tel:${company.phone}`} className="text-sm hover:text-primary transition-colors">
-                                {company.phone}
-                            </a>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <MapPin className="h-4 w-4 text-muted-foreground" />
-                            <span className="text-sm">{company.address}</span>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/* Deals */}
-                <Card className="animate-fade-in lg:col-span-2">
-                    <CardHeader>
-                        <CardTitle className="text-lg">{t("opportunities")}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="space-y-3">
-                            {company.deals.map((deal) => (
-                                <div
-                                    key={deal.id}
-                                    className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/30 transition-colors"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <div className={`w-2 h-2 rounded-full ${stageLabels[deal.stage].color}`} />
-                                        <div>
-                                            <p className="font-medium text-sm">{deal.title}</p>
-                                            <p className="text-xs text-muted-foreground">
-                                                {t(stageLabels[deal.stage].labelKey)} • {formatDate(deal.date, language)}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <span className="font-semibold text-sm bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                                        {formatCurrency(deal.value, language)}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-
-            {/* Activities */}
-            <Card className="animate-fade-in">
-                <CardHeader>
-                    <CardTitle className="text-lg">{t("recentActivitiesTitle")}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-4">
-                        {company.activities.map((activity, index) => (
-                            <div key={index} className="flex items-start gap-3">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted">
-                                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                {/* OVERVIEW TAB */}
+                <TabsContent value="overview" className="space-y-6">
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                        <Card>
+                            <CardContent className="p-6 flex items-center gap-4">
+                                <div className="p-3 bg-blue-100 rounded-lg text-blue-600">
+                                    <TrendingUp className="h-6 w-6" />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-medium">{t(activity.textKey)}</p>
-                                    <p className="text-xs text-muted-foreground">{formatDate(activity.date, language)}</p>
+                                    <p className="text-sm text-muted-foreground">{t("totalRevenue")}</p>
+                                    <h3 className="text-2xl font-bold">₺285.000</h3>
                                 </div>
-                            </div>
-                        ))}
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardContent className="p-6 flex items-center gap-4">
+                                <div className="p-3 bg-emerald-100 rounded-lg text-emerald-600">
+                                    <FileText className="h-6 w-6" />
+                                </div>
+                                <div>
+                                    <p className="text-sm text-muted-foreground">{t("openDeals")}</p>
+                                    <h3 className="text-2xl font-bold">3</h3>
+                                </div>
+                            </CardContent>
+                        </Card>
                     </div>
-                </CardContent>
-            </Card>
+
+                    <div className="grid gap-6 md:grid-cols-3">
+                        <Card className="md:col-span-1">
+                            <CardHeader>
+                                <CardTitle className="text-lg">{t("contactInfo")}</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                <div className="flex items-center gap-3">
+                                    <Mail className="h-4 w-4 text-muted-foreground" />
+                                    <span>{company.email}</span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <Phone className="h-4 w-4 text-muted-foreground" />
+                                    <span>{company.phone}</span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <MapPin className="h-4 w-4 text-muted-foreground" />
+                                    <span>İstanbul, Türkiye</span>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </TabsContent>
+
+                {/* TIMELINE TAB */}
+                <TabsContent value="timeline">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>{t("activityHistory")}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
+                                {companyActivities.map((activity, index) => (
+                                    <div key={activity.id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                                        <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-slate-300 group-[.is-active]:bg-blue-500 text-slate-500 group-[.is-active]:text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+                                            {activity.type === 'call' ? <Phone className="w-4 h-4" /> : activity.type === 'email' ? <Mail className="w-4 h-4" /> : <Users className="w-4 h-4" />}
+                                        </div>
+                                        <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-card p-4 rounded border shadow-sm">
+                                            <div className="flex items-center justify-between space-x-2 mb-1">
+                                                <div className="font-bold text-slate-900">{activity.type === 'call' ? t('phone') : t('meeting')}</div>
+                                                <time className="font-caveat font-medium text-amber-500 text-xs">
+                                                    {formatDate(activity.date)}
+                                                </time>
+                                            </div>
+                                            <div className="text-slate-500 text-sm">{activity.note}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+
+                {/* TASKS TAB */}
+                <TabsContent value="tasks">
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between">
+                            <CardTitle>{t("relatedTasks")}</CardTitle>
+                            <Button size="sm">
+                                <Plus className="h-4 w-4 mr-2" />
+                                {t("newTask")}
+                            </Button>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="space-y-4">
+                                {companyTasks.map((task, index) => (
+                                    <div key={task.id || index} className="flex items-center justify-between p-4 border rounded-lg bg-card/50 hover:bg-card transition-colors">
+                                        <div className="flex items-start gap-3">
+                                            <div className="mt-1">
+                                                <div className={cn("w-2 h-2 rounded-full", task.priority === 'high' ? 'bg-red-500' : 'bg-blue-500')} />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-medium">{task.title}</h4>
+                                                <p className="text-sm text-muted-foreground">{task.description}</p>
+                                                <div className="flex items-center gap-2 mt-2 text-xs">
+                                                    <Badge variant="outline">{t(task.status)}</Badge>
+                                                    <span className="text-muted-foreground">{t("dueDate")}: {task.dueDate}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <Button variant="ghost" size="icon">
+                                            <MoreHorizontal className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                ))}
+                                {companyTasks.length === 0 && (
+                                    <div className="text-center py-8 text-muted-foreground">
+                                        {t("noTasks")}
+                                    </div>
+                                )}
+                            </div>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+
+                {/* FILES TAB */}
+                <TabsContent value="files">
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between">
+                            <CardTitle>{t("files")}</CardTitle>
+                            <Button size="sm" variant="outline">
+                                <Paperclip className="h-4 w-4 mr-2" />
+                                {t("uploadFile")}
+                            </Button>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                {MOCK_FILES.map(file => (
+                                    <div key={file.id} className="group relative flex flex-col p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                                        <div className="flex items-start justify-between mb-2">
+                                            <div className="p-2 bg-blue-100 text-blue-600 rounded">
+                                                <FileText className="h-6 w-6" />
+                                            </div>
+                                            <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <Trash className="h-4 w-4 text-destructive" />
+                                            </Button>
+                                        </div>
+                                        <h4 className="font-medium truncate mb-1">{file.name}</h4>
+                                        <div className="flex items-center justify-between text-xs text-muted-foreground mt-auto">
+                                            <span>{file.size}</span>
+                                            <span>{file.date}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+            </Tabs>
         </div>
     );
 }

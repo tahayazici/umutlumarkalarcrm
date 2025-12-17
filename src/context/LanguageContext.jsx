@@ -6,9 +6,24 @@ export const translations = {
     tr: {
         // Navigation
         home: "Anasayfa",
+        tasks: "Görevler",
+        calendar: "Takvim",
         customers: "Müşteriler",
         opportunities: "Fırsatlar",
+        reports: "Raporlar",
         settings: "Ayarlar",
+
+        // Task Page specific
+        tasksSubtitle: "Takımınızın işlerini organize edin",
+        list: "Liste",
+        kanban: "Kanban",
+        title: "Başlık",
+        assignee: "Atanan Kişi",
+        dueDate: "Son Tarih",
+        description: "Açıklama",
+        editTask: "Görevi Düzenle",
+        save: "Kaydet",
+        cancel: "İptal",
 
         // Header
         searchPlaceholder: "Müşteri veya fırsat ara...",
@@ -61,6 +76,7 @@ export const translations = {
         // Pipeline
         pipelineTitle: "Satış Pipeline",
         pipelineSubtitle: "Fırsatları yönetin ve satış sürecinizi takip edin",
+        newTask: "Yeni Görev",
         newOpportunity: "Yeni Fırsat",
         activePipeline: "Aktif Pipeline",
         wonDeals: "Kazanılan",
@@ -137,6 +153,50 @@ export const translations = {
         noMatchForQuery: "için eşleşme yok",
         deal: "Fırsat",
 
+        todo: "Yapılacak",
+        in_progress: "Devam Ediyor",
+        done: "Tamamlandı",
+
+        // Common
+        selectAll: "Hepsini Seç",
+        clearSelection: "Seçimi Temizle",
+        apply: "Uygula",
+        reset: "Sıfırla",
+
+        // Specific
+        uploadFile: "Dosya Yükle",
+        relatedTasks: "Bağlı Görevler",
+        noTasks: "Bu müşteriye ait henüz bir görev yok.",
+        openDeals: "Açık Fırsatlar",
+        activityHistory: "Aktivite Geçmişi",
+
+        // Reports
+        reportsTitle: "Raporlar",
+        reportsSubtitle: "Performans göstergeleri ve analizler",
+        monthlyRevenue: "Aylık Ciro",
+        revenueDesc: "Son 7 ayın finansal performansı",
+        customerGrowth: "Müşteri Büyümesi",
+        growthDesc: "Haftalık yeni müşteri kazanımı",
+        projectVelocity: "Proje Tamamlama Hızı",
+        velocityDesc: "Ortalama görev tamamlama süreleri",
+
+        // Calendar
+        calendarTitle: "Takvim",
+        calendarSubtitle: "Ajandanızı ve planlarınızı takip edin",
+        prevMonth: "Önceki Ay",
+        nextMonth: "Sonraki Ay",
+        today: "Bugün",
+
+        // Dashboard new keys
+        todaysTasks: "Bugünün Görevleri",
+        taskStatus: "Görev Durumu",
+        fromLastMonth: "geçen aydan",
+        highPriority: "yüksek öncelikli",
+        newThisWeek: "Bu hafta yeni",
+
+        in_progress: "Devam Ediyor",
+        done: "Tamamlandı",
+
         // Months
         jan: "Oca", feb: "Şub", mar: "Mar", apr: "Nis", may: "May", jun: "Haz",
         jul: "Tem", aug: "Ağu", sep: "Eyl", oct: "Eki", nov: "Kas", dec: "Ara",
@@ -180,9 +240,24 @@ export const translations = {
     en: {
         // Navigation
         home: "Home",
+        tasks: "Tasks",
+        calendar: "Calendar",
         customers: "Customers",
         opportunities: "Opportunities",
+        reports: "Reports",
         settings: "Settings",
+
+        // Task Page specific
+        tasksSubtitle: "Organize your team's work",
+        list: "List",
+        kanban: "Kanban",
+        title: "Title",
+        assignee: "Assignee",
+        dueDate: "Due Date",
+        description: "Description",
+        editTask: "Edit Task",
+        save: "Save",
+        cancel: "Cancel",
 
         // Header
         searchPlaceholder: "Search customer or deal...",
@@ -235,6 +310,7 @@ export const translations = {
         // Pipeline
         pipelineTitle: "Sales Pipeline",
         pipelineSubtitle: "Manage opportunities and track your sales process",
+        newTask: "New Task",
         newOpportunity: "New Opportunity",
         activePipeline: "Active Pipeline",
         wonDeals: "Won Deals",
@@ -310,6 +386,48 @@ export const translations = {
         noResults: "No results found",
         noMatchForQuery: "No match for",
         deal: "Deal",
+
+        // Common
+        selectAll: "Select All",
+        clearSelection: "Clear Selection",
+        apply: "Apply",
+        reset: "Reset",
+
+        // Specific
+        uploadFile: "Upload File",
+        relatedTasks: "Related Tasks",
+        noTasks: "No tasks found for this customer.",
+        openDeals: "Open Deals",
+        activityHistory: "Activity History",
+
+        // Reports
+        reportsTitle: "Reports",
+        reportsSubtitle: "Performance indicators and analytics",
+        monthlyRevenue: "Monthly Revenue",
+        revenueDesc: "Financial performance of last 7 months",
+        customerGrowth: "Customer Growth",
+        growthDesc: "Weekly customer acquisition",
+        projectVelocity: "Project Completion Velocity",
+        velocityDesc: "Average task completion times",
+
+        // Calendar
+        calendarTitle: "Calendar",
+        calendarSubtitle: "Track your agenda and plans",
+        prevMonth: "Previous Month",
+        nextMonth: "Next Month",
+        today: "Today",
+
+        // Dashboard new keys
+        todaysTasks: "Today's Tasks",
+        taskStatus: "Task Status",
+        fromLastMonth: "from last month",
+        highPriority: "high priority",
+        newThisWeek: "New this week",
+
+
+        todo: "To Do",
+        in_progress: "In Progress",
+        done: "Done",
 
         // Months
         jan: "Jan", feb: "Feb", mar: "Mar", apr: "Apr", may: "May", jun: "Jun",

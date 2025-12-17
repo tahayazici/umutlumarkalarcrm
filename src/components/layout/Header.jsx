@@ -1,31 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Bell, Search, Settings, LogOut, X, Sun, Moon, Users, Kanban, Globe } from "lucide-react";
+import { Bell, Search, Settings, LogOut, X, Sun, Moon, Users, Kanban, Globe, CheckSquare } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/context/ThemeContext";
 import { useLanguage } from "@/context/LanguageContext";
+import { useData } from "@/context/DataContext";
 import { formatRelativeTime } from "@/lib/utils";
 
-// Arama için örnek veriler
-const searchData = {
-    customers: [
-        { id: 1, name: "Mehmet Yılmaz", company: "ABC Teknoloji A.Ş.", type: "customer" },
-        { id: 2, name: "Ayşe Kara", company: "XYZ Danışmanlık", type: "customer" },
-        { id: 3, name: "Ali Demir", company: "Metro Grup", type: "customer" },
-        { id: 4, name: "Zeynep Öztürk", company: "DEF Holding", type: "customer" },
-        { id: 5, name: "Can Aydın", company: "GHI Yazılım", type: "customer" },
-        { id: 6, name: "Selin Arslan", company: "JKL Medya", type: "customer" },
-    ],
-    deals: [
-        { id: 1, title: "Web Sitesi Yenileme", company: "ABC Teknoloji", type: "deal" },
-        { id: 2, title: "CRM Entegrasyonu", company: "XYZ Danışmanlık", type: "deal" },
-        { id: 3, title: "E-ticaret Platformu", company: "Metro Grup", type: "deal" },
-        { id: 4, title: "Mobil Uygulama", company: "DEF Holding", type: "deal" },
-        { id: 5, title: "Kurumsal Portal", company: "GHI Yazılım", type: "deal" },
-    ],
-};
-
+// Static notifications for demo (could also be moved to DataContext)
 const notificationsBase = [
     {
         id: 1,
@@ -57,6 +40,8 @@ export function Header() {
     const navigate = useNavigate();
     const { theme, toggleTheme } = useTheme();
     const { language, toggleLanguage, t } = useLanguage();
+    const { customers, tasks } = useData(); // Use real data
+
     const [showNotifications, setShowNotifications] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
@@ -86,28 +71,25 @@ export function Header() {
         const results = [];
 
         // Müşterilerde ara
-        searchData.customers.forEach((customer) => {
+        customers.forEach((customer) => {
             if (
                 customer.name.toLowerCase().includes(query) ||
                 customer.company.toLowerCase().includes(query)
             ) {
-                results.push(customer);
+                results.push({ ...customer, type: "customer" });
             }
         });
 
-        // Fırsatlarda ara
-        searchData.deals.forEach((deal) => {
-            if (
-                deal.title.toLowerCase().includes(query) ||
-                deal.company.toLowerCase().includes(query)
-            ) {
-                results.push(deal);
+        // Görevlerde ara
+        tasks.forEach((task) => {
+            if (task.title.toLowerCase().includes(query)) {
+                results.push({ ...task, type: "task", name: task.title, company: t("tasks") });
             }
         });
 
         setSearchResults(results);
         setShowSearchResults(true);
-    }, [searchQuery]);
+    }, [searchQuery, customers, tasks, t]);
 
     // Dışarı tıklanınca arama sonuçlarını kapat
     useEffect(() => {
@@ -129,9 +111,9 @@ export function Header() {
 
     const handleResultClick = (result) => {
         if (result.type === "customer") {
-            navigate("/musteriler");
-        } else if (result.type === "deal") {
-            navigate("/firsatlar");
+            navigate(`/sirket/${result.id}`); // Go to detail page
+        } else if (result.type === "task") {
+            navigate("/gorevler");
         }
         setSearchQuery("");
         setShowSearchResults(false);
@@ -178,26 +160,26 @@ export function Header() {
                             <div className="max-h-80 overflow-y-auto">
                                 {searchResults.map((result, index) => (
                                     <button
-                                        key={`${result.type}-${result.id}`}
+                                        key={`${result.type}-${result.id}-${index}`}
                                         className="w-full flex items-center gap-3 px-4 py-3 hover:bg-muted/50 transition-colors cursor-pointer text-left"
                                         onClick={() => handleResultClick(result)}
                                     >
                                         <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${result.type === "customer"
                                             ? "bg-blue-500/10 text-blue-500"
-                                            : "bg-cyan-500/10 text-cyan-500"
+                                            : "bg-purple-500/10 text-purple-500"
                                             }`}>
                                             {result.type === "customer" ? (
                                                 <Users className="h-4 w-4" />
                                             ) : (
-                                                <Kanban className="h-4 w-4" />
+                                                <CheckSquare className="h-4 w-4" />
                                             )}
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <p className="font-medium text-sm truncate">
-                                                {result.type === "customer" ? result.name : result.title}
+                                                {result.name}
                                             </p>
                                             <p className="text-xs text-muted-foreground truncate">
-                                                {result.company} • {result.type === "customer" ? t("customer") : t("deal")}
+                                                {result.company} • {result.type === "customer" ? t("customer") : t("tasks")}
                                             </p>
                                         </div>
                                     </button>
@@ -282,7 +264,7 @@ export function Header() {
                             />
                             <div className="absolute right-0 top-12 z-50 w-80 max-w-[calc(100vw-2rem)] rounded-xl border bg-card shadow-lg animate-fade-in">
                                 <div className="flex items-center justify-between p-4 border-b">
-                                    <h3 className="font-semibold">Bildirimler</h3>
+                                    <h3 className="font-semibold">{t("notifications")}</h3>
                                     <Button
                                         variant="ghost"
                                         size="icon"
@@ -365,7 +347,7 @@ export function Header() {
                                         onClick={handleSettingsClick}
                                     >
                                         <Settings className="h-4 w-4" />
-                                        Ayarlar
+                                        {t("settings")}
                                     </button>
                                     <button className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg hover:bg-muted text-destructive transition-colors cursor-pointer">
                                         <LogOut className="h-4 w-4" />
@@ -408,20 +390,20 @@ export function Header() {
                                         >
                                             <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${result.type === "customer"
                                                 ? "bg-blue-500/10 text-blue-500"
-                                                : "bg-cyan-500/10 text-cyan-500"
+                                                : "bg-purple-500/10 text-purple-500"
                                                 }`}>
                                                 {result.type === "customer" ? (
                                                     <Users className="h-4 w-4" />
                                                 ) : (
-                                                    <Kanban className="h-4 w-4" />
+                                                    <CheckSquare className="h-4 w-4" />
                                                 )}
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <p className="font-medium text-sm truncate">
-                                                    {result.type === "customer" ? result.name : result.title}
+                                                    {result.name}
                                                 </p>
                                                 <p className="text-xs text-muted-foreground truncate">
-                                                    {result.company}
+                                                    {result.company} • {result.type === "customer" ? t("customer") : t("tasks")}
                                                 </p>
                                             </div>
                                         </button>
@@ -430,9 +412,9 @@ export function Header() {
                             ) : (
                                 <div className="p-6 text-center">
                                     <Search className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-                                    <p className="text-sm font-medium">Sonuç bulunamadı</p>
+                                    <p className="text-sm font-medium">{t("noResults")}</p>
                                     <p className="text-xs text-muted-foreground mt-1">
-                                        "{searchQuery}" için eşleşme yok
+                                        "{searchQuery}" {t("noMatchForQuery")}
                                     </p>
                                 </div>
                             )}

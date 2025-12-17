@@ -4,6 +4,9 @@ import {
     Users,
     Kanban,
     Settings,
+    Calendar,
+    CheckSquare,
+    BarChart3
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -56,8 +59,11 @@ function NavItem({ item, isActive, displayName }) {
 
 const navigation = [
     { key: "home", href: "/", icon: LayoutDashboard },
+    { key: "tasks", href: "/gorevler", icon: CheckSquare },
+    { key: "calendar", href: "/takvim", icon: Calendar },
     { key: "customers", href: "/musteriler", icon: Users },
     { key: "opportunities", href: "/firsatlar", icon: Kanban },
+    { key: "reports", href: "/raporlar", icon: BarChart3 },
     { key: "settings", href: "/ayarlar", icon: Settings },
 ];
 
