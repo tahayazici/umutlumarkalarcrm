@@ -42,6 +42,9 @@ export const translations = {
         completedProjects: "Tamamlanan Projeler",
         monthlySalesPerformance: "Aylık Satış Performansı",
         recentActivities: "Son Hareketler",
+        recentActivitiesDesc: "Müşterilerle yapılan son etkileşimler.",
+        totalCustomers: "Toplam Müşteri",
+        activeProjects: "Aktif Projeler",
         won: "Kazanıldı",
         proposal: "Teklif",
         customer: "Müşteri",
@@ -72,7 +75,11 @@ export const translations = {
         companyName: "Şirket Adı",
         cancel: "İptal",
         add: "Ekle",
-
+        export: "Dışa Aktar",
+        newCustomer: "Yeni Müşteri",
+        viewDetails: "Detayları Gör",
+        lead: "Potansiyel",
+        tryDifferentSearch: "Farklı bir arama terimi deneyin.",
         // Pipeline
         pipelineTitle: "Satış Pipeline",
         pipelineSubtitle: "Fırsatları yönetin ve satış sürecinizi takip edin",
@@ -194,12 +201,14 @@ export const translations = {
         highPriority: "yüksek öncelikli",
         newThisWeek: "Bu hafta yeni",
 
-        in_progress: "Devam Ediyor",
-        done: "Tamamlandı",
+
 
         // Months
         jan: "Oca", feb: "Şub", mar: "Mar", apr: "Nis", may: "May", jun: "Haz",
         jul: "Tem", aug: "Ağu", sep: "Eyl", oct: "Eki", nov: "Kas", dec: "Ara",
+
+        // Days
+        mon: "Pzt", tue: "Sal", wed: "Çar", thu: "Per", fri: "Cum", sat: "Cmt", sun: "Paz",
 
         // Time
         minutesAgo: "dakika önce",
@@ -236,6 +245,64 @@ export const translations = {
         activityProjectCancelled: "Proje iptal edildi",
         activityProposalDetailsExplained: "Teklif detayları açıklandı",
         activityProjectKickoff: "Proje başlangıç toplantısı",
+
+        // New keys for full translation
+        overview: "Genel Bakış",
+        timeline: "Zaman Çizelgesi",
+        files: "Dosyalar",
+        searchPlaceholderCustomers: "İsim, şirket veya e-posta ile ara...",
+        week: "Hafta",
+        admin: "Yönetici",
+        unassigned: "Atanmamış",
+        searchTasks: "Görev ara...",
+        istanbulTurkey: "İstanbul, Türkiye",
+        selectStatus: "Durum Seç",
+        // Charts
+        revenue: "Ciro",
+        profit: "Kâr",
+        newCustomers: "Yeni Müşteriler",
+        growthDesc: "Aylık müşteri artış oranı",
+        velocityDesc: "Proje tamamlama hızı",
+        revenueDesc: "Aylık ciro ve kâr analizi",
+        // Pipeline
+        newDeal: "Yeni Fırsat",
+        negotiating: "Görüşülüyor",
+        proposalSent: "Teklif Gönderildi",
+        won: "Kazanıldı",
+        lost: "Kaybedildi",
+        selectCompany: "Şirket Seç",
+        companyNotFound: "Şirket bulunamadı",
+        noMatchFor: "için eşleşme yok",
+        moveTo: "Taşı",
+        total: "Toplam",
+        // Mock Data
+        task_website_design: "Web sitesi tasarımı",
+        task_website_design_desc: "Ana sayfa mockup çizimi yapılacak",
+        task_meeting: "Müşteri toplantısı",
+        task_meeting_desc: "Proje detayları görüşülecek",
+        task_invoice: "Fatura kesimi",
+        task_invoice_desc: "Aralık ayı faturası",
+        task_proposal: "Teklif hazırlığı",
+        task_proposal_desc: "Yeni proje için teklif taslağı",
+
+        deal_website_renewal: "Web Sitesi Yenileme",
+        deal_crm_integration: "CRM Entegrasyonu",
+        deal_ecommerce: "E-ticaret Platformu",
+        deal_mobile_app: "Mobil Uygulama",
+        deal_corp_portal: "Kurumsal Portal",
+        deal_api_dev: "API Geliştirme",
+        deal_data_analysis: "Veri Analizi Platformu",
+        deal_automation: "Otomasyon Sistemi",
+        deal_cloud: "Bulut Altyapısı",
+
+        activity_call_note: "Proje revizyonları konuşuldu",
+        activity_email_note: "Sözleşme taslağı gönderildi",
+        activity_meeting_note: "Ofis ziyareti yapıldı",
+
+        high: "Yüksek",
+        medium: "Orta",
+        low: "Düşük",
+        actionSuccessful: "başarıyla tetiklendi.",
     },
     en: {
         // Navigation
@@ -276,6 +343,9 @@ export const translations = {
         completedProjects: "Completed Projects",
         monthlySalesPerformance: "Monthly Sales Performance",
         recentActivities: "Recent Activities",
+        recentActivitiesDesc: "Recent interactions with customers.",
+        totalCustomers: "Total Customers",
+        activeProjects: "Active Projects",
         won: "Won",
         proposal: "Proposal",
         customer: "Customer",
@@ -306,7 +376,11 @@ export const translations = {
         companyName: "Company Name",
         cancel: "Cancel",
         add: "Add",
-
+        export: "Export",
+        newCustomer: "New Customer",
+        viewDetails: "View Details",
+        lead: "Lead",
+        tryDifferentSearch: "Try a different search term.",
         // Pipeline
         pipelineTitle: "Sales Pipeline",
         pipelineSubtitle: "Manage opportunities and track your sales process",
@@ -386,6 +460,9 @@ export const translations = {
         noResults: "No results found",
         noMatchForQuery: "No match for",
         deal: "Deal",
+        todo: "To Do",
+        in_progress: "In Progress",
+        done: "Done",
 
         // Common
         selectAll: "Select All",
@@ -425,13 +502,14 @@ export const translations = {
         newThisWeek: "New this week",
 
 
-        todo: "To Do",
-        in_progress: "In Progress",
-        done: "Done",
+
 
         // Months
         jan: "Jan", feb: "Feb", mar: "Mar", apr: "Apr", may: "May", jun: "Jun",
         jul: "Jul", aug: "Aug", sep: "Sep", oct: "Oct", nov: "Nov", dec: "Dec",
+
+        // Days
+        mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat", sun: "Sun",
 
         // Time
         minutesAgo: "minutes ago",
@@ -468,6 +546,64 @@ export const translations = {
         activityProjectCancelled: "Project cancelled",
         activityProposalDetailsExplained: "Proposal details explained",
         activityProjectKickoff: "Project kickoff meeting",
+
+        // New keys for full translation
+        overview: "Overview",
+        timeline: "Timeline",
+        files: "Files",
+        searchPlaceholderCustomers: "Search by name, company or email...",
+        week: "Week",
+        admin: "Admin",
+        unassigned: "Unassigned",
+        searchTasks: "Search tasks...",
+        istanbulTurkey: "Istanbul, Turkey",
+        selectStatus: "Select Status",
+        // Charts
+        revenue: "Revenue",
+        profit: "Profit",
+        newCustomers: "New Customers",
+        growthDesc: "Monthly customer growth rate",
+        velocityDesc: "Project completion velocity",
+        revenueDesc: "Monthly revenue and profit analysis",
+        // Pipeline
+        newDeal: "New Opportunity",
+        negotiating: "Negotiating",
+        proposalSent: "Proposal Sent",
+        won: "Won",
+        lost: "Lost",
+        selectCompany: "Select Company",
+        companyNotFound: "Company not found",
+        noMatchFor: "no match for",
+        moveTo: "Move to",
+        total: "Total",
+        // Mock Data
+        task_website_design: "Website design",
+        task_website_design_desc: "Homepage mockup to be drawn",
+        task_meeting: "Client meeting",
+        task_meeting_desc: "Project details to be discussed",
+        task_invoice: "Invoice generation",
+        task_invoice_desc: "December invoice",
+        task_proposal: "Proposal preparation",
+        task_proposal_desc: "Draft proposal for new project",
+
+        deal_website_renewal: "Website Renewal",
+        deal_crm_integration: "CRM Integration",
+        deal_ecommerce: "E-commerce Platform",
+        deal_mobile_app: "Mobile App",
+        deal_corp_portal: "Corporate Portal",
+        deal_api_dev: "API Development",
+        deal_data_analysis: "Data Analysis Platform",
+        deal_automation: "Automation System",
+        deal_cloud: "Cloud Infrastructure",
+
+        activity_call_note: "Project revisions discussed",
+        activity_email_note: "Contract draft sent",
+        activity_meeting_note: "Office visit made",
+
+        high: "High",
+        medium: "Medium",
+        low: "Low",
+        actionSuccessful: "triggered successfully.",
     },
 };
 

@@ -12,16 +12,16 @@ const MOCK_CUSTOMERS = [
 ];
 
 const MOCK_TASKS = [
-    { id: "t1", title: "Web sitesi tasarımı", description: "Ana sayfa mockup çizimi yapılacak", assignee: "u1", dueDate: "2024-12-25", priority: "high", status: "todo", customerId: "c1" },
-    { id: "t2", title: "Müşteri toplantısı", description: "Proje detayları görüşülecek", assignee: "u1", dueDate: "2024-12-20", priority: "medium", status: "in_progress", customerId: "c2" },
-    { id: "t3", title: "Fatura kesimi", description: "Aralık ayı faturası", assignee: "u2", dueDate: "2024-12-18", priority: "low", status: "done", customerId: "c1" },
-    { id: "t4", title: "Teklif hazırlığı", description: "Yeni proje için teklif taslağı", assignee: "u1", dueDate: "2024-12-22", priority: "high", status: "todo", customerId: "c4" },
+    { id: "t1", title: "task_website_design", description: "task_website_design_desc", assignee: "u1", dueDate: "2024-12-25", priority: "high", status: "todo", customerId: "c1" },
+    { id: "t2", title: "task_meeting", description: "task_meeting_desc", assignee: "u1", dueDate: "2024-12-20", priority: "medium", status: "in_progress", customerId: "c2" },
+    { id: "t3", title: "task_invoice", description: "task_invoice_desc", assignee: "u2", dueDate: "2024-12-18", priority: "low", status: "done", customerId: "c1" },
+    { id: "t4", title: "task_proposal", description: "task_proposal_desc", assignee: "u1", dueDate: "2024-12-22", priority: "high", status: "todo", customerId: "c4" },
 ];
 
 const MOCK_ACTIVITIES = [
-    { id: "a1", type: "call", customerId: "c1", note: "Proje revizyonları konuşuldu", date: "2024-12-15T10:00:00" },
-    { id: "a2", type: "email", customerId: "c1", note: "Sözleşme taslağı gönderildi", date: "2024-12-14T14:30:00" },
-    { id: "a3", type: "meeting", customerId: "c2", note: "Ofis ziyareti yapıldı", date: "2024-12-13T11:00:00" },
+    { id: "a1", type: "call", customerId: "c1", note: "activity_call_note", date: "2024-12-15T10:00:00" },
+    { id: "a2", type: "email", customerId: "c1", note: "activity_email_note", date: "2024-12-14T14:30:00" },
+    { id: "a3", type: "meeting", customerId: "c2", note: "activity_meeting_note", date: "2024-12-13T11:00:00" },
 ];
 
 export function DataProvider({ children }) {

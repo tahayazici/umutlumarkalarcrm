@@ -36,7 +36,7 @@ function TaskCard({ task, users, customers }) {
     };
 
     return (
-        <div className="bg-card border rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer group">
+        <div className="bg-card border rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer group" onClick={() => alert(t(task.title) + " - " + t("actions"))}>
             <div className="flex justify-between items-start mb-2">
                 <Badge variant="outline" className={cn("text-xs font-normal border-0 text-white", priorityColors[task.priority])}>
                     {t(task.priority)}
@@ -49,9 +49,9 @@ function TaskCard({ task, users, customers }) {
                     )}
                 </div>
             </div>
-            <h4 className="font-medium text-sm mb-1">{task.title}</h4>
+            <h4 className="font-medium text-sm mb-1">{t(task.title) || task.title}</h4>
             <div className="text-xs text-muted-foreground mb-3 line-clamp-2">
-                {task.description}
+                {t(task.description) || task.description}
             </div>
 
             <div className="flex items-center justify-between pt-2 border-t text-xs text-muted-foreground">
@@ -75,7 +75,7 @@ function KanbanColumn({ status, title, tasks, users, customers }) {
 
     return (
         <div className="flex flex-col min-w-[300px] w-full md:w-[320px]">
-            <div className="flex items-center justify-between mb-3 p-2 rounded-lg bg-muted/50">
+            <div className="flex items-center justify-between mb-3 p-2 rounded-lg bg-muted">
                 <span className="font-semibold text-sm">{title ? t(title) : status}</span>
                 <Badge variant="secondary" className="bg-background">{tasks.length}</Badge>
             </div>
@@ -99,9 +99,9 @@ function TaskTable({ tasks, users, customers }) {
     };
 
     return (
-        <div className="border rounded-lg overflow-hidden">
+        <div className="border rounded-lg overflow-hidden bg-card">
             <table className="w-full text-sm text-left">
-                <thead className="bg-muted/50 text-muted-foreground font-medium">
+                <thead className="bg-muted text-muted-foreground font-medium">
                     <tr>
                         <th className="p-3">{t("title")}</th>
                         <th className="p-3">{t("assignee")}</th>
@@ -118,13 +118,13 @@ function TaskTable({ tasks, users, customers }) {
                         const customer = customers.find(c => c.id === task.customerId);
                         return (
                             <tr key={task.id} className="hover:bg-muted/30 transition-colors">
-                                <td className="p-3 font-medium">{task.title}</td>
+                                <td className="p-3 font-medium">{t(task.title) || task.title}</td>
                                 <td className="p-3">
                                     <div className="flex items-center gap-2">
                                         <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs overflow-hidden">
                                             {assignee?.name[0] || "?"}
                                         </div>
-                                        <span>{assignee?.name || "Unassigned"}</span>
+                                        <span>{assignee?.name || t("unassigned")}</span>
                                     </div>
                                 </td>
                                 <td className="p-3">
@@ -139,7 +139,7 @@ function TaskTable({ tasks, users, customers }) {
                                 <td className="p-3">{task.dueDate}</td>
                                 <td className="p-3 text-muted-foreground">{customer?.company || "-"}</td>
                                 <td className="p-3 text-right">
-                                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => alert(t('actions'))}>
                                         <MoreHorizontal className="w-4 h-4" />
                                     </Button>
                                     {/* Edit/Delete actions would go here */}
@@ -236,7 +236,7 @@ export function Tasks() {
                 <div className="relative flex-1 w-full">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input
-                        placeholder={t("searchPlaceholder")}
+                        placeholder={t("searchTasks")}
                         className="pl-9"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -264,7 +264,13 @@ export function Tasks() {
                     >
                         {t("in_progress")}
                     </Button>
-                    {/* Add DONE filter button if needed, missed in original code but consistent with logic */}
+                    <Button
+                        variant={statusFilter === "done" ? "secondary" : "outline"}
+                        size="sm"
+                        onClick={() => setStatusFilter("done")}
+                    >
+                        {t("done")}
+                    </Button>
                 </div>
             </div>
 

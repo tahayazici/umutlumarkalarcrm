@@ -6,11 +6,9 @@ import {
     Users,
     CreditCard,
     Activity,
-    ArrowUpRight,
     TrendingUp,
     Briefcase,
     CheckCircle2,
-    CalendarDays,
     MoreHorizontal
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,7 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
 
 export function Dashboard() {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const { customers, tasks, activities } = useData();
 
     // CALCULATE KPIS
@@ -116,7 +114,7 @@ export function Dashboard() {
                                     <div className="flex items-center gap-3">
                                         <div className={`w-2 h-2 rounded-full ${task.priority === 'high' ? 'bg-red-500' : 'bg-blue-500'}`} />
                                         <div>
-                                            <p className="text-sm font-medium leading-none">{task.title}</p>
+                                            <p className="text-sm font-medium leading-none">{t(task.title) || task.title}</p>
                                             <p className="text-xs text-muted-foreground mt-1">{task.dueDate}</p>
                                         </div>
                                     </div>
@@ -170,7 +168,7 @@ export function Dashboard() {
                 <Card className="col-span-4">
                     <CardHeader>
                         <CardTitle>{t('recentActivities')}</CardTitle>
-                        <CardDescription>Müşterilerle yapılan son etkileşimler.</CardDescription>
+                        <CardDescription>{t('recentActivitiesDesc')}</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-6">
@@ -180,9 +178,9 @@ export function Dashboard() {
                                         {activity.type === 'meeting' ? <Briefcase className="w-4 h-4" /> : <Users className="w-4 h-4" />}
                                     </div>
                                     <div className="grid gap-1">
-                                        <p className="font-medium">{activity.note}</p>
+                                        <p className="font-medium">{t(activity.note) || activity.note}</p>
                                         <div className="text-xs text-muted-foreground flex gap-2">
-                                            <span>{new Date(activity.date).toLocaleDateString("tr-TR")}</span>
+                                            <span>{new Date(activity.date).toLocaleDateString(language === 'tr' ? 'tr-TR' : 'en-US')}</span>
                                             <span>•</span>
                                             <span>{t('customer')} ID: {activity.customerId}</span>
                                         </div>

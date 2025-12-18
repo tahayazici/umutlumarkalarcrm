@@ -18,10 +18,10 @@ export function Reports() {
     ];
 
     const customerGrowthData = [
-        { name: 'Hafta 1', newCustomers: 4 },
-        { name: 'Hafta 2', newCustomers: 7 },
-        { name: 'Hafta 3', newCustomers: 2 },
-        { name: 'Hafta 4', newCustomers: 9 },
+        { name: `${t('week')} 1`, newCustomers: 4 },
+        { name: `${t('week')} 2`, newCustomers: 7 },
+        { name: `${t('week')} 3`, newCustomers: 2 },
+        { name: `${t('week')} 4`, newCustomers: 9 },
     ];
 
     return (
@@ -49,7 +49,7 @@ export function Reports() {
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
                                     <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
                                     <YAxis fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `₺${value}`} />
-                                    <Tooltip />
+                                    <Tooltip formatter={(value, name) => [value, t(name)]} />
                                     <Bar dataKey="revenue" fill="#3b82f6" radius={[4, 4, 0, 0]} />
                                 </BarChart>
                             </ResponsiveContainer>
@@ -70,7 +70,7 @@ export function Reports() {
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
                                     <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
                                     <YAxis fontSize={12} tickLine={false} axisLine={false} />
-                                    <Tooltip />
+                                    <Tooltip formatter={(value, name) => [value, t(name)]} />
                                     <Area type="monotone" dataKey="newCustomers" stroke="#10b981" fill="#10b981" fillOpacity={0.2} />
                                 </AreaChart>
                             </ResponsiveContainer>
@@ -91,7 +91,7 @@ export function Reports() {
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
                                     <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
                                     <YAxis fontSize={12} tickLine={false} axisLine={false} />
-                                    <Tooltip />
+                                    <Tooltip formatter={(value, name) => [value, t(name)]} />
                                     <Line type="monotone" dataKey="profit" stroke="#8b5cf6" strokeWidth={2} />
                                 </LineChart>
                             </ResponsiveContainer>

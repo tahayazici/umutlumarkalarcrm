@@ -4,7 +4,7 @@ import { Header } from "./Header";
 
 export function Layout() {
     return (
-        <div className="min-h-screen bg-background overflow-x-hidden">
+        <div className="min-h-screen overflow-x-hidden">
             {/* Desktop Sidebar */}
             <Sidebar />
 

@@ -22,20 +22,14 @@ export function CalendarPage() {
         return { days, firstDay: adjustedFirstDay };
     };
 
-    const monthNamesTr = [
-        "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
-        "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
-    ];
-    const monthNamesEn = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+    const monthNames = [
+        t('jan'), t('feb'), t('mar'), t('apr'), t('may'), t('jun'),
+        t('jul'), t('aug'), t('sep'), t('oct'), t('nov'), t('dec')
     ];
 
-    const dayNamesTr = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
-    const dayNamesEn = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
-    const monthNames = language === 'tr' ? monthNamesTr : monthNamesEn;
-    const dayNames = language === 'tr' ? dayNamesTr : dayNamesEn;
+    const dayNames = [
+        t('mon'), t('tue'), t('wed'), t('thu'), t('fri'), t('sat'), t('sun')
+    ];
 
     const { days, firstDay } = getDaysInMonth(currentDate);
 

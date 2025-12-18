@@ -17,37 +17,22 @@ import {
 import { formatCurrency } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/context/LanguageContext";
+import { useData } from "@/context/DataContext";
 
-const initialColumns = [
-    { id: "new", title: "Yeni Fırsat", color: "bg-slate-500" },
-    { id: "negotiating", title: "Görüşülüyor", color: "bg-blue-500" },
-    { id: "proposal", title: "Teklif Gönderildi", color: "bg-amber-500" },
-    { id: "won", title: "Kazanıldı", color: "bg-emerald-500" },
-    { id: "lost", title: "Kaybedildi", color: "bg-red-500" },
-];
 
-const companyOptions = [
-    { name: "ABC Teknoloji", slug: "abc-teknoloji" },
-    { name: "XYZ Danışmanlık", slug: "xyz-danismanlik" },
-    { name: "Metro Grup", slug: "metro-grup" },
-    { name: "DEF Holding", slug: "def-holding" },
-    { name: "GHI Yazılım", slug: "ghi-yazilim" },
-    { name: "JKL Medya", slug: "jkl-medya" },
-    { name: "MNO Lojistik", slug: "mno-lojistik" },
-    { name: "PQR Finansal", slug: "pqr-finansal" },
-    { name: "STU Holding", slug: "stu-holding" },
-];
+
+
 
 const initialDeals = [
-    { id: 1, title: "Web Sitesi Yenileme", company: "ABC Teknoloji", companySlug: "abc-teknoloji", value: 85000, stage: "new", priority: "high" },
-    { id: 2, title: "CRM Entegrasyonu", company: "XYZ Danışmanlık", companySlug: "xyz-danismanlik", value: 125000, stage: "negotiating", priority: "medium" },
-    { id: 3, title: "E-ticaret Platformu", company: "Metro Grup", companySlug: "metro-grup", value: 280000, stage: "proposal", priority: "high" },
-    { id: 4, title: "Mobil Uygulama", company: "DEF Holding", companySlug: "def-holding", value: 195000, stage: "negotiating", priority: "low" },
-    { id: 5, title: "Kurumsal Portal", company: "GHI Yazılım", companySlug: "ghi-yazilim", value: 150000, stage: "won", priority: "medium" },
-    { id: 6, title: "API Geliştirme", company: "JKL Medya", companySlug: "jkl-medya", value: 65000, stage: "new", priority: "low" },
-    { id: 7, title: "Veri Analizi Platformu", company: "MNO Lojistik", companySlug: "mno-lojistik", value: 320000, stage: "lost", priority: "high" },
-    { id: 8, title: "Otomasyon Sistemi", company: "PQR Finansal", companySlug: "pqr-finansal", value: 175000, stage: "proposal", priority: "medium" },
-    { id: 9, title: "Bulut Altyapısı", company: "STU Holding", companySlug: "stu-holding", value: 420000, stage: "won", priority: "high" },
+    { id: 1, title: "deal_website_renewal", company: "ABC Teknoloji A.Ş.", companySlug: "c1", value: 85000, stage: "new", priority: "high" },
+    { id: 2, title: "deal_crm_integration", company: "XYZ Danışmanlık", companySlug: "c2", value: 125000, stage: "negotiating", priority: "medium" },
+    { id: 3, title: "deal_ecommerce", company: "Metro Grup", companySlug: "c3", value: 280000, stage: "proposal", priority: "high" },
+    { id: 4, title: "deal_mobile_app", company: "DEF Holding", companySlug: "c4", value: 195000, stage: "negotiating", priority: "low" },
+    { id: 5, title: "deal_corp_portal", company: "ABC Teknoloji A.Ş.", companySlug: "c1", value: 150000, stage: "won", priority: "medium" },
+    { id: 6, title: "deal_api_dev", company: "XYZ Danışmanlık", companySlug: "c2", value: 65000, stage: "new", priority: "low" },
+    { id: 7, title: "deal_data_analysis", company: "Metro Grup", companySlug: "c3", value: 320000, stage: "lost", priority: "high" },
+    { id: 8, title: "deal_automation", company: "DEF Holding", companySlug: "c4", value: 175000, stage: "proposal", priority: "medium" },
+    { id: 9, title: "deal_cloud", company: "ABC Teknoloji A.Ş.", companySlug: "c1", value: 420000, stage: "won", priority: "high" },
 ];
 
 const priorityLabels = {
@@ -106,7 +91,7 @@ function CompanySearch({ value, onChange, companies }) {
                             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                             <Input
                                 type="text"
-                                placeholder="Şirket ara..."
+                                placeholder={t("searchCompany")}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="pl-8 h-9"
@@ -153,7 +138,7 @@ function CompanySearch({ value, onChange, companies }) {
 
 function DealCard({ deal, onMoveToStage, columns, onCardClick }) {
     const [showMoveMenu, setShowMoveMenu] = useState(false);
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     return (
         <Card
             className="hover:shadow-lg hover:scale-[1.02] transition-all duration-200 group cursor-pointer border-l-4"
@@ -163,7 +148,7 @@ function DealCard({ deal, onMoveToStage, columns, onCardClick }) {
             <CardContent className="p-4">
                 <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-sm leading-tight truncate">{deal.title}</h4>
+                        <h4 className="font-medium text-sm leading-tight truncate">{t(deal.title) || deal.title}</h4>
                         <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
                             <Building2 className="h-3 w-3 shrink-0" />
                             <span className="truncate">{deal.company}</span>
@@ -232,7 +217,7 @@ function PipelineColumn({ column, deals, onMoveToStage, columns, onCardClick }) 
 
     return (
         <div className="flex flex-col min-w-[300px] w-[300px]">
-            <div className="flex items-center gap-2 mb-4 p-3 rounded-lg bg-muted/30">
+            <div className="flex items-center gap-2 mb-4 p-3 rounded-lg bg-muted">
                 <div className={cn("w-3 h-3 rounded-full", column.color)} />
                 <h3 className="font-semibold flex-1">{column.title}</h3>
                 <Badge variant="secondary">{columnDeals.length}</Badge>
@@ -253,7 +238,7 @@ function PipelineColumn({ column, deals, onMoveToStage, columns, onCardClick }) 
                     </div>
                 )}
             </div>
-            <div className="mt-3 p-2 rounded-lg bg-muted/30 text-center">
+            <div className="mt-3 p-2 rounded-lg bg-muted text-center">
                 <span className="text-sm text-muted-foreground">{t("total")}: </span>
                 <span className="text-sm font-semibold">{formatCurrency(totalValue, language)}</span>
             </div>
@@ -263,7 +248,8 @@ function PipelineColumn({ column, deals, onMoveToStage, columns, onCardClick }) 
 
 export function Pipeline() {
     const navigate = useNavigate();
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
+    const { customers } = useData();
     const [deals, setDeals] = useState(initialDeals);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [newDeal, setNewDeal] = useState({
@@ -295,11 +281,11 @@ export function Pipeline() {
 
     const handleAddDeal = () => {
         if (newDeal.title && newDeal.companySlug && newDeal.value) {
-            const selectedCompany = companyOptions.find(c => c.slug === newDeal.companySlug);
+            const selectedCompany = customers.find(c => c.id === newDeal.companySlug);
             const newDealObj = {
                 id: deals.length + 1,
                 title: newDeal.title,
-                company: selectedCompany?.name || "",
+                company: selectedCompany?.company || "",
                 companySlug: newDeal.companySlug,
                 value: parseInt(newDeal.value),
                 stage: "new",
@@ -359,7 +345,7 @@ export function Pipeline() {
                                 <CompanySearch
                                     value={newDeal.companySlug}
                                     onChange={(slug) => setNewDeal({ ...newDeal, companySlug: slug })}
-                                    companies={companyOptions}
+                                    companies={customers.map(c => ({ name: c.company, slug: c.id }))}
                                 />
                             </div>
                             <div className="grid gap-2">
@@ -450,7 +436,7 @@ export function Pipeline() {
 
             {/* Kanban Board */}
             <Card className="overflow-hidden">
-                <CardHeader className="border-b bg-muted/30">
+                <CardHeader className="border-b bg-muted">
                     <CardTitle className="text-lg">{t("kanbanView")}</CardTitle>
                 </CardHeader>
                 <CardContent className="p-4">

@@ -45,6 +45,11 @@ export function CompanyDetail() {
     const companyTasks = tasks.filter(t => t.customerId === company?.id);
     const companyActivities = activities.filter(a => a.customerId === company?.id);
 
+    const handleAction = (actionName) => {
+        console.log(`Action triggered: ${actionName}`);
+        alert(`${t(actionName) || actionName} ${t("actionSuccessful") || "başarıyla tetiklendi."}`);
+    };
+
     if (!company) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
@@ -84,15 +89,15 @@ export function CompanyDetail() {
                     </div>
                 </div>
                 <div className="flex gap-2">
-                    <Button variant="outline">
+                    <Button variant="outline" onClick={() => handleAction("email")}>
                         <Mail className="h-4 w-4 mr-2" />
                         {t("email")}
                     </Button>
-                    <Button variant="outline">
+                    <Button variant="outline" onClick={() => handleAction("call")}>
                         <Phone className="h-4 w-4 mr-2" />
                         {t("call")}
                     </Button>
-                    <Button>
+                    <Button onClick={() => handleAction("add")}>
                         <Plus className="h-4 w-4 mr-2" />
                         {t("add")}
                     </Button>
@@ -151,7 +156,7 @@ export function CompanyDetail() {
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <MapPin className="h-4 w-4 text-muted-foreground" />
-                                    <span>İstanbul, Türkiye</span>
+                                    <span>{t("istanbulTurkey")}</span>
                                 </div>
                             </CardContent>
                         </Card>
@@ -192,7 +197,7 @@ export function CompanyDetail() {
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between">
                             <CardTitle>{t("relatedTasks")}</CardTitle>
-                            <Button size="sm">
+                            <Button size="sm" onClick={() => handleAction("newTask")}>
                                 <Plus className="h-4 w-4 mr-2" />
                                 {t("newTask")}
                             </Button>
@@ -200,7 +205,7 @@ export function CompanyDetail() {
                         <CardContent>
                             <div className="space-y-4">
                                 {companyTasks.map((task, index) => (
-                                    <div key={task.id || index} className="flex items-center justify-between p-4 border rounded-lg bg-card/50 hover:bg-card transition-colors">
+                                    <div key={task.id || index} className="flex items-center justify-between p-4 border rounded-lg bg-card hover:bg-muted/50 transition-colors">
                                         <div className="flex items-start gap-3">
                                             <div className="mt-1">
                                                 <div className={cn("w-2 h-2 rounded-full", task.priority === 'high' ? 'bg-red-500' : 'bg-blue-500')} />
@@ -214,7 +219,7 @@ export function CompanyDetail() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <Button variant="ghost" size="icon">
+                                        <Button variant="ghost" size="icon" onClick={() => handleAction("more")}>
                                             <MoreHorizontal className="h-4 w-4" />
                                         </Button>
                                     </div>
@@ -234,7 +239,7 @@ export function CompanyDetail() {
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between">
                             <CardTitle>{t("files")}</CardTitle>
-                            <Button size="sm" variant="outline">
+                            <Button size="sm" variant="outline" onClick={() => handleAction("uploadFile")}>
                                 <Paperclip className="h-4 w-4 mr-2" />
                                 {t("uploadFile")}
                             </Button>
@@ -247,7 +252,7 @@ export function CompanyDetail() {
                                             <div className="p-2 bg-blue-100 text-blue-600 rounded">
                                                 <FileText className="h-6 w-6" />
                                             </div>
-                                            <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => handleAction("delete")}>
                                                 <Trash className="h-4 w-4 text-destructive" />
                                             </Button>
                                         </div>

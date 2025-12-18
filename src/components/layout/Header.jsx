@@ -126,7 +126,7 @@ export function Header() {
     };
 
     return (
-        <header className="sticky top-0 z-30 flex h-14 md:h-16 items-center justify-between border-b bg-card/80 backdrop-blur-sm px-4 md:px-6">
+        <header className="sticky top-[-1px] z-30 flex h-14 md:h-16 items-center justify-between border-b bg-card/80 backdrop-blur-md px-4 md:px-6 pt-[1px]">
             {/* Left side - Logo for mobile */}
             <div className="flex items-center gap-3 md:hidden">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 via-cyan-500 to-blue-600 text-white font-bold text-sm shadow-lg">
@@ -206,6 +206,7 @@ export function Header() {
                     size="icon"
                     className="md:hidden h-9 w-9"
                     onClick={() => setShowSearch(!showSearch)}
+                    aria-label={t("searchPlaceholder")}
                 >
                     <Search className="h-5 w-5" />
                 </Button>
@@ -217,6 +218,7 @@ export function Header() {
                     onClick={toggleLanguage}
                     className="h-9 w-9 md:h-10 md:w-10"
                     title={language === "tr" ? "English" : "Türkçe"}
+                    aria-label={language === "tr" ? "English" : "Türkçe"}
                 >
                     <Globe className="h-5 w-5" />
                 </Button>
@@ -228,6 +230,7 @@ export function Header() {
                     onClick={toggleTheme}
                     className="h-9 w-9 md:h-10 md:w-10"
                     title={theme === "light" ? t("darkMode") : t("lightMode")}
+                    aria-label={theme === "light" ? t("darkMode") : t("lightMode")}
                 >
                     {theme === "light" ? (
                         <Moon className="h-5 w-5" />
@@ -246,6 +249,7 @@ export function Header() {
                             setShowNotifications(!showNotifications);
                             setShowUserMenu(false);
                         }}
+                        aria-label={t("notifications")}
                     >
                         <Bell className="h-5 w-5" />
                         {unreadCount > 0 && (
@@ -349,7 +353,10 @@ export function Header() {
                                         <Settings className="h-4 w-4" />
                                         {t("settings")}
                                     </button>
-                                    <button className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg hover:bg-muted text-destructive transition-colors cursor-pointer">
+                                    <button
+                                        className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg hover:bg-muted text-destructive transition-colors cursor-pointer"
+                                        onClick={() => alert(t("logout") + " " + t("actionSuccessful"))}
+                                    >
                                         <LogOut className="h-4 w-4" />
                                         {t("logout")}
                                     </button>

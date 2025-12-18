@@ -13,7 +13,7 @@ export function Settings() {
         name: "Ahmet Kaya",
         email: "ahmet@umutlumarkalar.com",
         phone: "+90 532 123 45 67",
-        role: "Yönetici",
+        role: t('admin'),
     });
 
     const [notifications, setNotifications] = useState({
@@ -22,7 +22,6 @@ export function Settings() {
         dealUpdates: true,
         customerActivity: false,
         weeklyReports: true,
-        monthlyDigest: true,
     });
 
     const handleProfileChange = (field, value) => {
@@ -34,7 +33,7 @@ export function Settings() {
     };
 
     return (
-        <div className="space-y-6 max-w-4xl">
+        <div className="space-y-6 max-w-4xl mx-auto">
             {/* Page Title */}
             <div>
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent animate-gradient-text">{t("settingsTitle")}</h1>
@@ -44,7 +43,7 @@ export function Settings() {
             </div>
 
             {/* Profile Settings */}
-            <Card className="animate-fade-in">
+            <Card>
                 <CardHeader>
                     <div className="flex items-center gap-2">
                         <User className="h-5 w-5 text-primary" />
@@ -102,7 +101,7 @@ export function Settings() {
             </Card>
 
             {/* Notification Settings */}
-            <Card className="animate-fade-in">
+            <Card>
                 <CardHeader>
                     <div className="flex items-center gap-2">
                         <Bell className="h-5 w-5 text-primary" />
@@ -174,24 +173,12 @@ export function Settings() {
                                 onCheckedChange={() => handleNotificationChange("weeklyReports")}
                             />
                         </div>
-                        <div className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted/30 transition-colors">
-                            <div>
-                                <p className="font-medium">{t("monthlyDigest")}</p>
-                                <p className="text-sm text-muted-foreground">
-                                    {t("monthlyDigestDesc")}
-                                </p>
-                            </div>
-                            <Switch
-                                checked={notifications.monthlyDigest}
-                                onCheckedChange={() => handleNotificationChange("monthlyDigest")}
-                            />
-                        </div>
                     </div>
                 </CardContent>
             </Card>
 
             {/* Security Settings */}
-            <Card className="animate-fade-in">
+            <Card>
                 <CardHeader>
                     <div className="flex items-center gap-2">
                         <Shield className="h-5 w-5 text-primary" />
@@ -202,7 +189,7 @@ export function Settings() {
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <div className="flex items-center justify-between p-4 rounded-lg border">
+                    <div className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted/30 transition-colors">
                         <div>
                             <p className="font-medium">{t("changePassword")}</p>
                             <p className="text-sm text-muted-foreground">
@@ -211,7 +198,7 @@ export function Settings() {
                         </div>
                         <Button variant="outline">{t("change")}</Button>
                     </div>
-                    <div className="flex items-center justify-between p-4 rounded-lg border">
+                    <div className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted/30 transition-colors">
                         <div>
                             <p className="font-medium">{t("twoFactorAuth")}</p>
                             <p className="text-sm text-muted-foreground">
